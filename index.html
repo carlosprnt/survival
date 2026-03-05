@@ -22,6 +22,11 @@
       --btn-border: rgba(0, 0, 0, 0.15);
     }
 
+    /* ── Custom cursor ── */
+    html, body, a, button {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M2 0 L0 2 L20 26 L22 24 Z' fill='%23111111'/%3E%3Cpath d='M2 0 L1 1 L10 13 L12 11 Z' fill='%23666666'/%3E%3Cellipse cx='23' cy='27' rx='6' ry='3.5' transform='rotate(-45 23 27)' fill='%23444444'/%3E%3C/svg%3E") 1 0, crosshair;
+    }
+
     html {
       scroll-behavior: smooth;
     }
@@ -32,6 +37,7 @@
       font-family: 'Google Sans', sans-serif;
       font-weight: 300;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     /* ── Top bar ── */
@@ -40,6 +46,9 @@
       justify-content: space-between;
       align-items: center;
       padding: 28px 40px 0;
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeDown 0.6s ease 0.1s forwards;
     }
 
     .site-name {
@@ -65,6 +74,9 @@
       letter-spacing: -0.015em;
       color: var(--text);
       margin-bottom: 22px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.7s ease 0.25s forwards;
     }
 
     .hero-sub {
@@ -74,6 +86,9 @@
       color: var(--muted);
       letter-spacing: 0.025em;
       max-width: 340px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease 0.45s forwards;
     }
 
     /* ── Rule ── */
@@ -81,6 +96,8 @@
       height: 1px;
       background: var(--rule-color);
       margin: 0 40px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 0.55s forwards;
     }
 
     /* ── Grid ── */
@@ -104,19 +121,17 @@
       color: var(--text);
       transition: background 0.22s ease;
       opacity: 0;
-      transform: translateY(14px);
-      animation: fadeUp 0.55s ease forwards;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease, background 0.22s ease;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .card:hover {
       background: #f9f9f9;
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     /* Image area */
@@ -223,6 +238,8 @@
       justify-content: space-between;
       align-items: center;
       margin-top: 1px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.7s forwards;
     }
 
     .footer-left {
@@ -237,6 +254,25 @@
       font-size: 12px;
       font-weight: 300;
       color: var(--muted);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeDown {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     /* ── Responsive ── */
@@ -301,7 +337,6 @@
   </footer>
 
   <script>
-    // ── Products ──────────────────────────────────────────────────
     const products = [
       { brand: 'Leatherman',    name: 'Signal',               price: '€109', asin: 'B07NJHX769GRAY', seed: 'leatherman-signal'  },
       { brand: 'Grayl',         name: 'GeoPress 24 oz',       price: '€78',  asin: 'B07NVYR4P9',     seed: 'grayl-geopress'    },
@@ -327,11 +362,10 @@
 
     products.forEach((p, i) => {
       const card = document.createElement('a');
-      card.href   = `https://www.amazon.com/dp/${p.asin}`;
-      card.target = '_blank';
-      card.rel    = 'noopener noreferrer sponsored';
+      card.href      = `https://www.amazon.com/dp/${p.asin}`;
+      card.target    = '_blank';
+      card.rel       = 'noopener noreferrer sponsored';
       card.className = 'card';
-      card.style.animationDelay = `${i * 0.04}s`;
 
       card.innerHTML = `
         <div class="card-image">
@@ -354,6 +388,25 @@
       `;
 
       grid.appendChild(card);
+    });
+
+    // ── Scroll-triggered reveal ───────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const card  = entry.target;
+        const index = parseInt(card.dataset.index, 10);
+        // Stagger within the row: delay based on column position (index mod 4)
+        const col   = index % 4;
+        card.style.transitionDelay = `${col * 0.07}s`;
+        card.classList.add('visible');
+        observer.unobserve(card);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.card').forEach((card, i) => {
+      card.dataset.index = i;
+      observer.observe(card);
     });
   </script>
 
