@@ -22,11 +22,6 @@
       --btn-border: rgba(0, 0, 0, 0.15);
     }
 
-    /* ── Custom cursor ── */
-    html, body, a, button {
-      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Crect x='3' y='26' width='30' height='9' rx='4.5' fill='none' stroke='%23111' stroke-width='2.5' transform='rotate(-42 18 30.5)'/%3E%3Ccircle cx='12' cy='40' r='1.8' fill='%23111'/%3E%3Cpath d='M30 19 L38 6' fill='none' stroke='%23111' stroke-width='2.5' stroke-linecap='round'/%3E%3Cellipse cx='41' cy='5' rx='5.5' ry='4' transform='rotate(-45 41 5)' fill='none' stroke='%23111' stroke-width='2.5'/%3E%3Cpath d='M31 21 L46 20' fill='none' stroke='%23111' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M44 20 L53 15' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M44 21 L53 25' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M46 20 L54 20' fill='none' stroke='%23111' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M32 23 L47 48' fill='none' stroke='%23111' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") 28 20, auto;
-    }
-
     html {
       scroll-behavior: smooth;
     }
@@ -333,7 +328,7 @@
   <!-- Footer -->
   <footer>
     <span class="footer-left">Links de afiliación</span>
-    <span class="footer-right">14 objects · 2025</span>
+    <span class="footer-right">15 objects · 2025</span>
   </footer>
 
   <script>
@@ -352,6 +347,7 @@
       { brand: 'Light My Fire', name: 'Swedish FireSteel Army', price: '€16', asin: 'B0019IXVRO',   seed: 'lightmyfire-steel' },
       { brand: 'Sea to Summit', name: 'Spark SP I Down',      price: '€280', asin: 'B07WDTJMC9',     seed: 'seatosummit-spark' },
       { brand: 'ESEE',          name: 'ESEE-4',               price: '€145', asin: 'B003MXF3TC',     seed: 'esee-four'         },
+      { brand: 'Victorinox',    name: 'Swiss Army Huntsman',  price: '€29',  asin: 'B0013VAHIA',     seed: 'victorinox-huntsman', url: 'https://www.amazon.es/dp/B0013VAHIA' },
     ];
 
     const arrowSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
@@ -362,7 +358,7 @@
 
     products.forEach((p, i) => {
       const card = document.createElement('a');
-      card.href      = `https://www.amazon.com/dp/${p.asin}`;
+      card.href      = p.url || `https://www.amazon.com/dp/${p.asin}`;
       card.target    = '_blank';
       card.rel       = 'noopener noreferrer sponsored';
       card.className = 'card';
