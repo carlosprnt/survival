@@ -332,78 +332,123 @@
   </footer>
 
   <script>
-    const products = [
-      { brand: 'Leatherman',    name: 'Signal',               price: '€109', asin: 'B07NJHX769GRAY', seed: 'leatherman-signal'  },
-      { brand: 'Grayl',         name: 'GeoPress 24 oz',       price: '€78',  asin: 'B07NVYR4P9',     seed: 'grayl-geopress'    },
-      { brand: 'Garmin',        name: 'inReach Mini 2',       price: '€349', asin: 'B09BFTWX5F',     seed: 'garmin-inreach'    },
-      { brand: 'Morakniv',      name: 'Garberg Carbon',       price: '€89',  asin: 'B01LW2HL5G',     seed: 'morakniv-garberg'  },
-      { brand: 'Nitecore',      name: 'NU31',                 price: '€49',  asin: 'B09Q5PQTP7',     seed: 'nitecore-nu31'     },
-      { brand: 'MSR',           name: 'Hubba Hubba NX 2P',   price: '€550', asin: 'B07T3MFLFL',     seed: 'msr-hubba'         },
-      { brand: 'Therm-a-Rest',  name: 'NeoAir XLite NXT',    price: '€199', asin: 'B09NRFP4W8',     seed: 'thermarest-neoair' },
-      { brand: 'MSR',           name: 'PocketRocket 2',       price: '€45',  asin: 'B01N5N5SBW',     seed: 'msr-pocketrocket'  },
-      { brand: 'Sawyer',        name: 'Squeeze Filter',       price: '€32',  asin: 'B00FA2IXBU',     seed: 'sawyer-squeeze'    },
-      { brand: 'Goal Zero',     name: 'Nomad 10',             price: '€59',  asin: 'B07FC1M7XV',     seed: 'goalzero-nomad'    },
-      { brand: 'Anker',         name: 'PowerCore 26800',      price: '€65',  asin: 'B01M5AX9J3',     seed: 'anker-powercore'   },
-      { brand: 'Light My Fire', name: 'Swedish FireSteel Army', price: '€16', asin: 'B0019IXVRO',   seed: 'lightmyfire-steel' },
-      { brand: 'Sea to Summit', name: 'Spark SP I Down',      price: '€280', asin: 'B07WDTJMC9',     seed: 'seatosummit-spark' },
-      { brand: 'ESEE',          name: 'ESEE-4',               price: '€145', asin: 'B003MXF3TC',     seed: 'esee-four'         },
-      { brand: 'Victorinox',    name: 'Swiss Army Huntsman',  price: '€29',  asin: 'B0013VAHIA',     seed: 'victorinox-huntsman', url: 'https://www.amazon.es/dp/B0013VAHIA' },
+    // ── Google Sheets CMS ─────────────────────────────────────────
+    // Pasos para configurar:
+    // 1. Crea una Google Sheet con estas columnas (fila 1 = cabeceras):
+    //    brand | name | price | url | image
+    // 2. Rellena tus productos (image = URL de Cloudinary u otro host)
+    // 3. Archivo → Compartir → Publicar en la web → Hoja1 → CSV → Publicar
+    // 4. Copia la URL y pégala abajo
+    const SHEET_CSV_URL = 'PEGA_AQUI_TU_URL_DE_GOOGLE_SHEETS';
+
+    // ── Fallback: productos por defecto ───────────────────────────
+    const fallbackProducts = [
+      { brand: 'Leatherman',    name: 'Signal',                 price: '€109', url: 'https://www.amazon.com/dp/B07NJHX769', image: 'https://picsum.photos/seed/leatherman-signal/400/400'   },
+      { brand: 'Grayl',         name: 'GeoPress 24 oz',         price: '€78',  url: 'https://www.amazon.com/dp/B07NVYR4P9', image: 'https://picsum.photos/seed/grayl-geopress/400/400'      },
+      { brand: 'Garmin',        name: 'inReach Mini 2',         price: '€349', url: 'https://www.amazon.com/dp/B09BFTWX5F', image: 'https://picsum.photos/seed/garmin-inreach/400/400'      },
+      { brand: 'Morakniv',      name: 'Garberg Carbon',         price: '€89',  url: 'https://www.amazon.com/dp/B01LW2HL5G', image: 'https://picsum.photos/seed/morakniv-garberg/400/400'    },
+      { brand: 'Nitecore',      name: 'NU31',                   price: '€49',  url: 'https://www.amazon.com/dp/B09Q5PQTP7', image: 'https://picsum.photos/seed/nitecore-nu31/400/400'       },
+      { brand: 'MSR',           name: 'Hubba Hubba NX 2P',      price: '€550', url: 'https://www.amazon.com/dp/B07T3MFLFL', image: 'https://picsum.photos/seed/msr-hubba/400/400'           },
+      { brand: 'Therm-a-Rest',  name: 'NeoAir XLite NXT',       price: '€199', url: 'https://www.amazon.com/dp/B09NRFP4W8', image: 'https://picsum.photos/seed/thermarest-neoair/400/400'  },
+      { brand: 'MSR',           name: 'PocketRocket 2',         price: '€45',  url: 'https://www.amazon.com/dp/B01N5N5SBW', image: 'https://picsum.photos/seed/msr-pocketrocket/400/400'   },
+      { brand: 'Sawyer',        name: 'Squeeze Filter',         price: '€32',  url: 'https://www.amazon.com/dp/B00FA2IXBU', image: 'https://picsum.photos/seed/sawyer-squeeze/400/400'     },
+      { brand: 'Goal Zero',     name: 'Nomad 10',               price: '€59',  url: 'https://www.amazon.com/dp/B07FC1M7XV', image: 'https://picsum.photos/seed/goalzero-nomad/400/400'     },
+      { brand: 'Anker',         name: 'PowerCore 26800',        price: '€65',  url: 'https://www.amazon.com/dp/B01M5AX9J3', image: 'https://picsum.photos/seed/anker-powercore/400/400'    },
+      { brand: 'Light My Fire', name: 'Swedish FireSteel Army', price: '€16',  url: 'https://www.amazon.com/dp/B0019IXVRO', image: 'https://picsum.photos/seed/lightmyfire-steel/400/400'  },
+      { brand: 'Sea to Summit', name: 'Spark SP I Down',        price: '€280', url: 'https://www.amazon.com/dp/B07WDTJMC9', image: 'https://picsum.photos/seed/seatosummit-spark/400/400'  },
+      { brand: 'ESEE',          name: 'ESEE-4',                 price: '€145', url: 'https://www.amazon.com/dp/B003MXF3TC', image: 'https://picsum.photos/seed/esee-four/400/400'          },
+      { brand: 'Victorinox',    name: 'Swiss Army Huntsman',    price: '€29',  url: 'https://www.amazon.es/dp/B0013VAHIA',  image: 'https://picsum.photos/seed/victorinox-huntsman/400/400'},
     ];
 
+    // ── CSV parser ────────────────────────────────────────────────
+    function splitCSVRow(row) {
+      const result = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < row.length; i++) {
+        if (row[i] === '"') { inQ = !inQ; }
+        else if (row[i] === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+        else { cur += row[i]; }
+      }
+      result.push(cur.trim());
+      return result;
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = splitCSVRow(lines[0]);
+      return lines.slice(1)
+        .filter(l => l.trim())
+        .map(line => Object.fromEntries(headers.map((h, i) => [h, splitCSVRow(line)[i] || ''])));
+    }
+
+    // ── Render ────────────────────────────────────────────────────
     const arrowSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
       <path d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L11 8.5H3.75a.75.75 0 0 1 0-1.5H11L8.22 4.03a.75.75 0 0 1 0-1.06Z"/>
     </svg>`;
 
-    const grid = document.getElementById('grid');
+    function renderGrid(products) {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
 
-    products.forEach((p, i) => {
-      const card = document.createElement('a');
-      card.href      = p.url || `https://www.amazon.com/dp/${p.asin}`;
-      card.target    = '_blank';
-      card.rel       = 'noopener noreferrer sponsored';
-      card.className = 'card';
-
-      card.innerHTML = `
-        <div class="card-image">
-          <img
-            src="https://picsum.photos/seed/${p.seed}/400/400"
-            alt="${p.brand} ${p.name}"
-            loading="lazy"
-            width="400"
-            height="400"
-          >
-        </div>
-        <div class="card-info">
-          <span class="card-brand">${p.brand}</span>
-          <span class="card-name">${p.name}</span>
-          <div class="card-bottom">
-            <span class="card-price">${p.price}</span>
-            <span class="card-btn" aria-hidden="true">${arrowSVG}</span>
+      products.forEach((p) => {
+        const card = document.createElement('a');
+        card.href      = p.url || '#';
+        card.target    = '_blank';
+        card.rel       = 'noopener noreferrer sponsored';
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-image">
+            <img src="${p.image}" alt="${p.brand} ${p.name}" loading="lazy" width="400" height="400">
           </div>
-        </div>
-      `;
-
-      grid.appendChild(card);
-    });
-
-    // ── Scroll-triggered reveal ───────────────────────────────────
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const card  = entry.target;
-        const index = parseInt(card.dataset.index, 10);
-        // Stagger within the row: delay based on column position (index mod 4)
-        const col   = index % 4;
-        card.style.transitionDelay = `${col * 0.07}s`;
-        card.classList.add('visible');
-        observer.unobserve(card);
+          <div class="card-info">
+            <span class="card-brand">${p.brand}</span>
+            <span class="card-name">${p.name}</span>
+            <div class="card-bottom">
+              <span class="card-price">${p.price}</span>
+              <span class="card-btn" aria-hidden="true">${arrowSVG}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.card').forEach((card, i) => {
-      card.dataset.index = i;
-      observer.observe(card);
-    });
+      document.querySelector('.footer-right').textContent = `${products.length} objects · 2025`;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const card = entry.target;
+          const col  = parseInt(card.dataset.index, 10) % 4;
+          card.style.transitionDelay = `${col * 0.07}s`;
+          card.classList.add('visible');
+          observer.unobserve(card);
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.card').forEach((card, i) => {
+        card.dataset.index = i;
+        observer.observe(card);
+      });
+    }
+
+    // ── Load ──────────────────────────────────────────────────────
+    async function init() {
+      if (SHEET_CSV_URL.startsWith('PEGA_AQUI')) {
+        renderGrid(fallbackProducts);
+        return;
+      }
+      try {
+        const res  = await fetch(SHEET_CSV_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = parseCSV(await res.text());
+        renderGrid(data);
+      } catch (err) {
+        console.warn('No se pudo cargar Google Sheets, usando datos locales.', err);
+        renderGrid(fallbackProducts);
+      }
+    }
+
+    init();
   </script>
 
 </body>
