@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prepared — Survive with taste</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --text: #111110;
+      --muted: #999994;
+      --card-bg: #f5f5f5;
+      --card-hover-bg: #f9f9f9;
+      --grid-gap: rgba(0, 0, 0, 0.07);
+      --border-line: rgba(0, 0, 0, 0.09);
+      --rule-color: rgba(0, 0, 0, 0.09);
+      --btn-border: rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] {
+      --bg: #111110;
+      --text: #eeece8;
+      --muted: #888884;
+      --card-bg: #1b1b1a;
+      --card-hover-bg: #202020;
+      --grid-gap: rgba(255, 255, 255, 0.06);
+      --border-line: rgba(255, 255, 255, 0.07);
+      --rule-color: rgba(255, 255, 255, 0.07);
+      --btn-border: rgba(255, 255, 255, 0.18);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      transition: background 0.28s ease, color 0.28s ease;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 40px 0;
+    }
+
+    .site-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 19px;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text);
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+      border-radius: 50%;
+    }
+
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+
+    .theme-toggle svg {
+      display: block;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 76px 40px 56px;
+    }
+
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(54px, 8.5vw, 100px);
+      line-height: 1.0;
+      letter-spacing: -0.015em;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+
+    .hero-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 12.5px;
+      color: var(--muted);
+      letter-spacing: 0.025em;
+      max-width: 340px;
+    }
+
+    /* ── Rule ── */
+    .rule {
+      height: 1px;
+      background: var(--rule-color);
+      margin: 0 40px;
+    }
+
+    /* ── Grid ── */
+    .grid-wrapper {
+      padding: 0 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--grid-gap);
+    }
+
+    /* ── Card ── */
+    .card {
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.22s ease;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.55s ease forwards;
+    }
+
+    .card:hover {
+      background: var(--card-hover-bg);
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Image area */
+    .card-image {
+      aspect-ratio: 1 / 1;
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: background 0.22s ease;
+    }
+
+    .card:hover .card-image {
+      background: var(--card-hover-bg);
+    }
+
+    .card-image img {
+      width: 58%;
+      height: 58%;
+      object-fit: contain;
+      opacity: 0.82;
+      transition: transform 0.38s ease, opacity 0.38s ease;
+      display: block;
+    }
+
+    .card:hover .card-image img {
+      transform: scale(1.04) translateY(-3px);
+      opacity: 1;
+    }
+
+    /* Info area */
+    .card-info {
+      border-top: 1px solid var(--border-line);
+      padding: 13px 16px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .card-brand {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.2;
+      color: var(--text);
+      margin-top: 1px;
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 9px;
+    }
+
+    .card-price {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    .card-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--btn-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.22s ease, border-color 0.22s ease;
+    }
+
+    .card-btn svg {
+      color: var(--text);
+      transition: color 0.22s ease;
+    }
+
+    .card:hover .card-btn {
+      background: var(--text);
+      border-color: var(--text);
+    }
+
+    .card:hover .card-btn svg {
+      color: var(--bg);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 30px 40px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1px;
+    }
+
+    .footer-left {
+      font-size: 10.5px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    .footer-right {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        padding: 20px 20px 0;
+      }
+
+      .hero {
+        padding: 48px 20px 40px;
+      }
+
+      .rule {
+        margin: 0 20px;
+      }
+
+      .grid-wrapper {
+        padding: 0 20px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      footer {
+        padding: 24px 20px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <span class="site-name">Prepared</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+      <!-- Moon (shown in light mode) -->
+      <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <!-- Sun (shown in dark mode) -->
+      <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1 class="hero-headline">Survive<br>with taste.</h1>
+    <p class="hero-sub">A curated selection of objects that hold their own — in the wild and in the world.</p>
+  </div>
+
+  <!-- Divider -->
+  <div class="rule"></div>
+
+  <!-- Product grid -->
+  <div class="grid-wrapper">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <span class="footer-left">Links de afiliación</span>
+    <span class="footer-right">14 objects · 2025</span>
+  </footer>
+
+  <script>
+    // ── Theme toggle ──────────────────────────────────────────────
+    const toggle   = document.getElementById('themeToggle');
+    const iconMoon = document.getElementById('iconMoon');
+    const iconSun  = document.getElementById('iconSun');
+
+    let dark = localStorage.getItem('theme') === 'dark';
+
+    function applyTheme() {
+      if (dark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        iconMoon.style.display = 'none';
+        iconSun.style.display  = 'block';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        iconMoon.style.display = 'block';
+        iconSun.style.display  = 'none';
+      }
+    }
+
+    applyTheme();
+
+    toggle.addEventListener('click', () => {
+      dark = !dark;
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+      applyTheme();
+    });
+
+    // ── Products ──────────────────────────────────────────────────
+    const products = [
+      { brand: 'Leatherman',    name: 'Signal',               price: '€109', asin: 'B07NJHX769GRAY', seed: 'leatherman-signal'  },
+      { brand: 'Grayl',         name: 'GeoPress 24 oz',       price: '€78',  asin: 'B07NVYR4P9',     seed: 'grayl-geopress'    },
+      { brand: 'Garmin',        name: 'inReach Mini 2',       price: '€349', asin: 'B09BFTWX5F',     seed: 'garmin-inreach'    },
+      { brand: 'Morakniv',      name: 'Garberg Carbon',       price: '€89',  asin: 'B01LW2HL5G',     seed: 'morakniv-garberg'  },
+      { brand: 'Nitecore',      name: 'NU31',                 price: '€49',  asin: 'B09Q5PQTP7',     seed: 'nitecore-nu31'     },
+      { brand: 'MSR',           name: 'Hubba Hubba NX 2P',   price: '€550', asin: 'B07T3MFLFL',     seed: 'msr-hubba'         },
+      { brand: 'Therm-a-Rest',  name: 'NeoAir XLite NXT',    price: '€199', asin: 'B09NRFP4W8',     seed: 'thermarest-neoair' },
+      { brand: 'MSR',           name: 'PocketRocket 2',       price: '€45',  asin: 'B01N5N5SBW',     seed: 'msr-pocketrocket'  },
+      { brand: 'Sawyer',        name: 'Squeeze Filter',       price: '€32',  asin: 'B00FA2IXBU',     seed: 'sawyer-squeeze'    },
+      { brand: 'Goal Zero',     name: 'Nomad 10',             price: '€59',  asin: 'B07FC1M7XV',     seed: 'goalzero-nomad'    },
+      { brand: 'Anker',         name: 'PowerCore 26800',      price: '€65',  asin: 'B01M5AX9J3',     seed: 'anker-powercore'   },
+      { brand: 'Light My Fire', name: 'Swedish FireSteel Army', price: '€16', asin: 'B0019IXVRO',   seed: 'lightmyfire-steel' },
+      { brand: 'Sea to Summit', name: 'Spark SP I Down',      price: '€280', asin: 'B07WDTJMC9',     seed: 'seatosummit-spark' },
+      { brand: 'ESEE',          name: 'ESEE-4',               price: '€145', asin: 'B003MXF3TC',     seed: 'esee-four'         },
+    ];
+
+    const arrowSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"/>
+      <polyline points="12 5 19 12 12 19"/>
+    </svg>`;
+
+    const grid = document.getElementById('grid');
+
+    products.forEach((p, i) => {
+      const card = document.createElement('a');
+      card.href   = `https://www.amazon.com/dp/${p.asin}`;
+      card.target = '_blank';
+      card.rel    = 'noopener noreferrer sponsored';
+      card.className = 'card';
+      card.style.animationDelay = `${i * 0.04}s`;
+
+      card.innerHTML = `
+        <div class="card-image">
+          <img
+            src="https://picsum.photos/seed/${p.seed}/400/400"
+            alt="${p.brand} ${p.name}"
+            loading="lazy"
+            width="400"
+            height="400"
+          >
+        </div>
+        <div class="card-info">
+          <span class="card-brand">${p.brand}</span>
+          <span class="card-name">${p.name}</span>
+          <div class="card-bottom">
+            <span class="card-price">${p.price}</span>
+            <span class="card-btn" aria-hidden="true">${arrowSVG}</span>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
