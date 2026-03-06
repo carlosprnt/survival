@@ -68,16 +68,27 @@
       padding: 7px 14px;
       cursor: pointer;
       background: transparent;
-      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
       white-space: nowrap;
       position: relative;
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
     .war-btn:hover {
-      background: var(--text);
-      color: #ffffff;
-      border-color: var(--text);
+      text-decoration: underline;
     }
+
+    .war-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: none;
+    }
+
+    .war-dot.red  { background: #e53535; display: block; }
+    .war-dot.green { background: #22a854; display: block; }
 
     /* ── War panel ── */
     .war-panel {
@@ -149,7 +160,7 @@
     }
 
     .war-geo:hover {
-      background: #f5f5f5;
+      text-decoration: underline;
     }
 
     .war-geo svg {
@@ -218,7 +229,7 @@
     }
 
     .war-country-item:hover {
-      background: #f5f5f5;
+      text-decoration: underline;
     }
 
     .war-empty {
@@ -231,9 +242,9 @@
     /* ── Toast ── */
     .toast {
       position: fixed;
-      bottom: 28px;
+      top: 24px;
       left: 50%;
-      transform: translateX(-50%) translateY(12px);
+      transform: translateX(-50%) translateY(-12px);
       background: var(--text);
       color: #ffffff;
       padding: 13px 20px;
@@ -252,7 +263,7 @@
 
     .toast.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%) translateY(0px);
     }
 
     .toast.high {
@@ -332,10 +343,6 @@
       transform: translateY(0);
     }
 
-    .card:hover {
-      background: #f9f9f9;
-    }
-
     /* Image area */
     .card-image {
       aspect-ratio: 1 / 1;
@@ -344,25 +351,18 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      transition: background 0.22s ease;
-    }
-
-    .card:hover .card-image {
-      background: #f9f9f9;
     }
 
     .card-image img {
       width: 80%;
       height: 80%;
       object-fit: contain;
-      opacity: 0.82;
-      transition: transform 0.38s ease, opacity 0.38s ease;
+      transition: transform 0.38s ease;
       display: block;
     }
 
     .card:hover .card-image img {
-      transform: scale(1.04) translateY(-3px);
-      opacity: 1;
+      transform: scale(1.05);
     }
 
     /* Info area */
@@ -392,45 +392,13 @@
       margin-top: 1px;
     }
 
-    .card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 9px;
-    }
-
     .card-price {
       font-family: 'Google Sans', sans-serif;
       font-size: 12px;
       font-weight: 300;
       color: var(--muted);
       letter-spacing: 0.01em;
-    }
-
-    .card-btn {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 1px solid var(--btn-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.22s ease, border-color 0.22s ease;
-    }
-
-    .card-btn svg {
-      color: var(--text);
-      transition: color 0.22s ease;
-    }
-
-    .card:hover .card-btn {
-      background: var(--text);
-      border-color: var(--text);
-    }
-
-    .card:hover .card-btn svg {
-      color: #ffffff;
+      margin-top: 9px;
     }
 
     /* ── Footer ── */
@@ -534,7 +502,9 @@
   <!-- Top bar -->
   <div class="topbar">
     <span class="site-name">Prepared</span>
-    <button class="war-btn" id="warBtn" onclick="toggleWarPanel()">Check war conflict</button>
+    <button class="war-btn" id="warBtn" onclick="toggleWarPanel()">
+      <span class="war-dot" id="warDot"></span>Check war conflict
+    </button>
   </div>
 
   <!-- War conflict panel -->
@@ -623,9 +593,6 @@
     }
 
     // ── Render ────────────────────────────────────────────────────
-    const arrowSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L11 8.5H3.75a.75.75 0 0 1 0-1.5H11L8.22 4.03a.75.75 0 0 1 0-1.06Z"/>
-    </svg>`;
 
     function renderGrid(products) {
       const grid = document.getElementById('grid');
@@ -644,10 +611,7 @@
           <div class="card-info">
             <span class="card-brand">${p.brand}</span>
             <span class="card-name">${p.name}</span>
-            <div class="card-bottom">
-              <span class="card-price">${p.price}</span>
-              <span class="card-btn" aria-hidden="true">${arrowSVG}</span>
-            </div>
+            <span class="card-price">${p.price}</span>
           </div>
         `;
         grid.appendChild(card);
@@ -846,6 +810,8 @@
         return;
       }
       const risk = CONFLICT_RISK[key];
+      const dot = document.getElementById('warDot');
+      dot.className = 'war-dot ' + (risk > 50 ? 'red' : 'green');
       closeWarPanel();
       if (risk > 50) {
         showToast(`${key}\nConflict probability above 50% — stay alert and prepared.`, 'high');
