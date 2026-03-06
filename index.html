@@ -62,7 +62,9 @@
       padding: 0 40px 32px;
     }
 
-    body.is-carousel .view-toggle-wrap { display: none; }
+    body.is-carousel .hero,
+    body.is-carousel .rule,
+    body.is-carousel .grid-wrapper { display: none !important; }
 
     .view-toggle {
       position: relative;
@@ -323,17 +325,20 @@
     ───────────────────────────────────────────── */
     .carousel-section {
       display: none;
-      height: calc(100vh - 68px);
       position: relative;
       overflow: hidden;
+      flex: 1;
+      min-height: 0;
     }
-
-    body.is-carousel .hero,
-    body.is-carousel .rule,
-    body.is-carousel .grid-wrapper { display: none; }
 
     body.is-carousel .carousel-section { display: flex; }
     body.is-carousel footer { display: none; }
+    body.is-carousel {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
 
     /* Background giant text */
     .c-bg {
@@ -525,7 +530,7 @@
 
     @media (max-width: 640px) {
       .topbar { padding: 20px 20px 0; }
-      .war-btn { display: none; }
+      .war-btn { font-size: 9px; padding: 5px 10px; letter-spacing: 0.04em; }
       .war-panel { right: 20px; width: calc(100vw - 40px); }
       .hero { padding: 48px 20px 40px; }
       .rule { margin: 0 20px; }
@@ -537,7 +542,7 @@
       footer { padding: 24px 20px 30px; }
 
       /* Carousel mobile: stack vertically */
-      .carousel-section { flex-direction: column; height: calc(100vh - 60px); }
+      .carousel-section { flex-direction: column; }
       .c-info {
         width: 100%; min-width: unset;
         padding: 24px 20px 16px;
