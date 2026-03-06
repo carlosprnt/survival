@@ -57,27 +57,48 @@
       gap: 10px;
     }
 
-    /* ── View toggle ── */
+    /* ── View toggle (switch) ── */
     .view-toggle {
+      position: relative;
       display: flex;
+      align-items: center;
       border: 1px solid var(--btn-border);
+      border-radius: 100px;
+      padding: 3px;
+      gap: 0;
+      background: #fff;
+    }
+
+    .view-toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      height: calc(100% - 6px);
+      background: var(--text);
+      border-radius: 100px;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s;
+      pointer-events: none;
     }
 
     .vtbtn {
-      width: 32px;
-      height: 32px;
+      position: relative;
+      z-index: 1;
+      padding: 5px 12px;
       background: transparent;
       border: none;
+      border-radius: 100px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--muted);
-      transition: background 0.15s, color 0.15s;
+      transition: color 0.25s;
+      white-space: nowrap;
     }
 
-    .vtbtn.active { background: var(--text); color: #fff; }
-    .vtbtn:not(.active):hover { color: var(--text); }
+    .vtbtn.active { color: #fff; }
 
     /* ── War conflict button ── */
     .war-btn {
@@ -531,22 +552,10 @@
   <div class="topbar">
     <span class="site-name">Prepared</span>
     <div class="topbar-right">
-      <div class="view-toggle">
-        <button class="vtbtn active" id="btnGrid" onclick="setView('grid')" title="Grid view">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="0" y="0" width="6" height="6" fill="currentColor"/>
-            <rect x="8" y="0" width="6" height="6" fill="currentColor"/>
-            <rect x="0" y="8" width="6" height="6" fill="currentColor"/>
-            <rect x="8" y="8" width="6" height="6" fill="currentColor"/>
-          </svg>
-        </button>
-        <button class="vtbtn" id="btnCarousel" onclick="setView('carousel')" title="Experiential view">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="0" y="2" width="3" height="10" fill="currentColor" opacity="0.4"/>
-            <rect x="5" y="0" width="4" height="14" fill="currentColor"/>
-            <rect x="11" y="2" width="3" height="10" fill="currentColor" opacity="0.4"/>
-          </svg>
-        </button>
+      <div class="view-toggle" id="viewToggle">
+        <div class="view-toggle-slider" id="vtSlider"></div>
+        <button class="vtbtn active" id="btnGrid" onclick="setView('grid')">List</button>
+        <button class="vtbtn" id="btnCarousel" onclick="setView('carousel')">Experiential</button>
       </div>
       <button class="war-btn" id="warBtn" onclick="toggleWarPanel()">
         <span class="war-dot" id="warDot"></span>Check war conflict
@@ -718,13 +727,22 @@
     function setView(v) {
       currentView = v;
       document.body.classList.toggle('is-carousel', v === 'carousel');
-      document.getElementById('btnGrid').classList.toggle('active', v === 'grid');
-      document.getElementById('btnCarousel').classList.toggle('active', v === 'carousel');
+      const btnGrid  = document.getElementById('btnGrid');
+      const btnExp   = document.getElementById('btnCarousel');
+      const slider   = document.getElementById('vtSlider');
+      btnGrid.classList.toggle('active', v === 'grid');
+      btnExp.classList.toggle('active',  v === 'carousel');
+      const activeBtn = v === 'grid' ? btnGrid : btnExp;
+      slider.style.width     = activeBtn.offsetWidth + 'px';
+      slider.style.transform = `translateX(${activeBtn.offsetLeft - 3}px)`;
       if (v === 'carousel' && allProducts.length) {
         buildCarouselCards();
         updateCarousel();
       }
     }
+
+    // Init slider position after layout
+    window.addEventListener('load', () => setView('grid'));
 
     // ── Carousel ──────────────────────────────────────────────────
     let allProducts = [];
