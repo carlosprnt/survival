@@ -8,26 +8,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --text: #111110;
       --muted: #999994;
-      --border-line: rgba(0, 0, 0, 0.09);
-      --rule-color: rgba(0, 0, 0, 0.09);
-      --btn-border: rgba(0, 0, 0, 0.15);
+      --border-line: rgba(0,0,0,0.09);
+      --rule-color: rgba(0,0,0,0.09);
+      --btn-border: rgba(0,0,0,0.15);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      background: #ffffff;
+      background: #fff;
       color: var(--text);
       font-family: 'Google Sans', sans-serif;
       font-weight: 300;
@@ -35,7 +29,7 @@
       overflow-x: hidden;
     }
 
-    /* ── Top bar ── */
+    /* ── Topbar ── */
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -44,10 +38,11 @@
       opacity: 0;
       transform: translateY(-10px);
       animation: fadeDown 0.6s ease 0.1s forwards;
+      position: relative;
+      z-index: 50;
     }
 
     .site-name {
-      font-family: 'Google Sans', sans-serif;
       font-weight: 400;
       font-size: 17px;
       letter-spacing: 0.01em;
@@ -55,6 +50,34 @@
       text-decoration: none;
       user-select: none;
     }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── View toggle ── */
+    .view-toggle {
+      display: flex;
+      border: 1px solid var(--btn-border);
+    }
+
+    .vtbtn {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .vtbtn.active { background: var(--text); color: #fff; }
+    .vtbtn:not(.active):hover { color: var(--text); }
 
     /* ── War conflict button ── */
     .war-btn {
@@ -69,25 +92,15 @@
       cursor: pointer;
       background: transparent;
       white-space: nowrap;
-      position: relative;
       display: flex;
       align-items: center;
       gap: 7px;
     }
 
-    .war-btn:hover {
-      text-decoration: underline;
-    }
+    .war-btn:hover { text-decoration: underline; }
 
-    .war-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: none;
-    }
-
-    .war-dot.red  { background: #e53535; display: block; }
+    .war-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: none; }
+    .war-dot.red   { background: #e53535; display: block; }
     .war-dot.green { background: #22a854; display: block; }
 
     /* ── War panel ── */
@@ -96,17 +109,14 @@
       top: 64px;
       right: 40px;
       width: 272px;
-      background: #ffffff;
+      background: #fff;
       border: 1px solid rgba(0,0,0,0.12);
       box-shadow: 0 8px 32px rgba(0,0,0,0.08);
       z-index: 200;
       display: none;
       flex-direction: column;
     }
-
-    .war-panel.open {
-      display: flex;
-    }
+    .war-panel.open { display: flex; }
 
     .war-panel-header {
       display: flex;
@@ -125,119 +135,45 @@
     }
 
     .war-panel-close {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1;
-      padding: 0 2px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 18px; line-height: 1; padding: 0 2px;
       transition: color 0.15s;
     }
-
-    .war-panel-close:hover {
-      color: var(--text);
-    }
+    .war-panel-close:hover { color: var(--text); }
 
     .war-geo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-line);
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--text);
-      transition: background 0.15s;
-      background: none;
-      border-left: none;
-      border-right: none;
-      border-top: none;
-      font-family: 'Google Sans', sans-serif;
-      width: 100%;
-      text-align: left;
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-line);
+      cursor: pointer; font-size: 12px; font-weight: 400; color: var(--text);
+      background: none; border-left: none; border-right: none; border-top: none;
+      font-family: 'Google Sans', sans-serif; width: 100%; text-align: left;
+      transition: none;
     }
+    .war-geo:hover { text-decoration: underline; }
+    .war-geo svg { flex-shrink: 0; opacity: 0.5; }
 
-    .war-geo:hover {
-      text-decoration: underline;
-    }
-
-    .war-geo svg {
-      flex-shrink: 0;
-      opacity: 0.5;
-    }
-
-    .war-search-wrap {
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border-line);
-    }
+    .war-search-wrap { padding: 10px 16px; border-bottom: 1px solid var(--border-line); }
 
     .war-search {
-      width: 100%;
-      border: 1px solid var(--border-line);
-      padding: 7px 10px;
-      font-family: 'Google Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--text);
-      outline: none;
-      background: #fafafa;
-      transition: border-color 0.15s;
+      width: 100%; border: 1px solid var(--border-line);
+      padding: 7px 10px; font-family: 'Google Sans', sans-serif;
+      font-size: 12px; font-weight: 300; color: var(--text); outline: none;
+      background: #fafafa; transition: border-color 0.15s;
     }
+    .war-search:focus { border-color: rgba(0,0,0,0.3); background: #fff; }
+    .war-search::placeholder { color: var(--muted); }
 
-    .war-search:focus {
-      border-color: rgba(0,0,0,0.3);
-      background: #fff;
-    }
-
-    .war-search::placeholder {
-      color: var(--muted);
-    }
-
-    .war-list {
-      max-height: 220px;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-    }
-
-    .war-list::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .war-list::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .war-list::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.12);
-    }
+    .war-list { max-height: 220px; overflow-y: auto; overscroll-behavior: contain; }
+    .war-list::-webkit-scrollbar { width: 4px; }
+    .war-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
 
     .war-country-item {
-      display: block;
-      width: 100%;
-      padding: 9px 16px;
-      text-align: left;
-      background: none;
-      border: none;
-      font-family: 'Google Sans', sans-serif;
-      font-size: 12.5px;
-      font-weight: 300;
-      color: var(--text);
-      cursor: pointer;
-      transition: background 0.12s;
+      display: block; width: 100%; padding: 9px 16px; text-align: left;
+      background: none; border: none; font-family: 'Google Sans', sans-serif;
+      font-size: 12.5px; font-weight: 300; color: var(--text); cursor: pointer;
     }
-
-    .war-country-item:hover {
-      text-decoration: underline;
-    }
-
-    .war-empty {
-      padding: 16px;
-      font-size: 12px;
-      color: var(--muted);
-      text-align: center;
-    }
+    .war-country-item:hover { text-decoration: underline; }
+    .war-empty { padding: 16px; font-size: 12px; color: var(--muted); text-align: center; }
 
     /* ── Toast ── */
     .toast {
@@ -246,9 +182,8 @@
       left: 50%;
       transform: translateX(-50%) translateY(-12px);
       background: var(--text);
-      color: #ffffff;
+      color: #fff;
       padding: 13px 20px;
-      font-family: 'Google Sans', sans-serif;
       font-size: 12.5px;
       font-weight: 300;
       line-height: 1.45;
@@ -260,27 +195,12 @@
       pointer-events: none;
       white-space: pre-line;
     }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0px);
-    }
-
-    .toast.high {
-      background: #1a1a1a;
-    }
-
-    .toast.low {
-      background: #111110;
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0px); }
 
     /* ── Hero ── */
-    .hero {
-      padding: 76px 40px 56px;
-    }
+    .hero { padding: 76px 40px 56px; }
 
     .hero-headline {
-      font-family: 'Google Sans', sans-serif;
       font-weight: 300;
       font-size: clamp(54px, 8.5vw, 100px);
       line-height: 1.0;
@@ -293,7 +213,6 @@
     }
 
     .hero-sub {
-      font-family: 'Google Sans', sans-serif;
       font-weight: 300;
       font-size: 12.5px;
       color: var(--muted);
@@ -306,194 +225,303 @@
 
     /* ── Rule ── */
     .rule {
-      height: 1px;
-      background: var(--rule-color);
-      margin: 0 40px;
-      opacity: 0;
-      animation: fadeIn 0.5s ease 0.55s forwards;
+      height: 1px; background: var(--rule-color); margin: 0 40px;
+      opacity: 0; animation: fadeIn 0.5s ease 0.55s forwards;
     }
 
     /* ── Grid ── */
-    .grid-wrapper {
-      padding: 0 40px;
-    }
+    .grid-wrapper { padding: 0 40px; }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: rgba(0, 0, 0, 0.07);
+      background: rgba(0,0,0,0.07);
     }
 
     /* ── Card ── */
     .card {
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
-      text-decoration: none;
-      color: var(--text);
-      transition: background 0.22s ease;
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.55s ease, transform 0.55s ease, background 0.22s ease;
+      display: flex; flex-direction: column;
+      background: #fff; text-decoration: none; color: var(--text);
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
+    .card.visible { opacity: 1; transform: translateY(0); }
 
-    .card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Image area */
     .card-image {
-      aspect-ratio: 1 / 1;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      aspect-ratio: 1/1; background: #fff;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
 
     .card-image img {
-      width: 80%;
-      height: 80%;
-      object-fit: contain;
-      transition: transform 0.38s ease;
-      display: block;
+      width: 80%; height: 80%; object-fit: contain;
+      transition: transform 0.38s ease; display: block;
     }
+    .card:hover .card-image img { transform: scale(1.05); }
 
-    .card:hover .card-image img {
-      transform: scale(1.05);
-    }
-
-    /* Info area */
     .card-info {
       border-top: 1px solid var(--border-line);
       padding: 13px 16px 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+      display: flex; flex-direction: column; gap: 3px;
     }
 
     .card-brand {
-      font-family: 'Google Sans', sans-serif;
-      font-size: 9px;
-      font-weight: 400;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 9px; font-weight: 400; letter-spacing: 0.13em;
+      text-transform: uppercase; color: var(--muted);
     }
 
-    .card-name {
-      font-family: 'Google Sans', sans-serif;
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 1.2;
-      color: var(--text);
-      margin-top: 1px;
-    }
+    .card-name { font-weight: 400; font-size: 15px; line-height: 1.2; color: var(--text); margin-top: 1px; }
 
     .card-price {
-      font-family: 'Google Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--muted);
-      letter-spacing: 0.01em;
-      margin-top: 9px;
+      font-size: 12px; font-weight: 300; color: var(--muted);
+      letter-spacing: 0.01em; margin-top: 9px;
     }
 
     /* ── Footer ── */
     footer {
       padding: 30px 40px 36px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 1px; opacity: 0; animation: fadeUp 0.5s ease 0.7s forwards;
+    }
+    .footer-left { font-size: 10.5px; font-weight: 300; color: var(--muted); letter-spacing: 0.01em; }
+    .footer-right { font-size: 12px; font-weight: 300; color: var(--muted); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* ─────────────────────────────────────────────
+       CAROUSEL VIEW
+    ───────────────────────────────────────────── */
+    .carousel-section {
+      display: none;
+      height: calc(100vh - 68px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.is-carousel .hero,
+    body.is-carousel .rule,
+    body.is-carousel .grid-wrapper { display: none; }
+
+    body.is-carousel .carousel-section { display: flex; }
+    body.is-carousel footer { display: none; }
+
+    /* Background giant text */
+    .c-bg {
+      position: absolute;
+      inset: 0;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-top: 1px;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 0.7s forwards;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .footer-left {
-      font-size: 10.5px;
-      font-weight: 300;
+    .c-bg-word {
+      font-size: clamp(100px, 18vw, 220px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,0,0,0.055);
+      user-select: none;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Left info panel */
+    .c-info {
+      position: relative;
+      z-index: 10;
+      width: 42%;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 52px 48px 40px;
+      flex-shrink: 0;
+    }
+
+    .c-label {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: var(--muted);
-      letter-spacing: 0.01em;
+      margin-bottom: 14px;
+      transition: opacity 0.3s;
     }
 
-    .footer-right {
-      font-family: 'Google Sans', sans-serif;
+    .c-name {
+      font-size: clamp(32px, 3.8vw, 56px);
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-bottom: 22px;
+      transition: opacity 0.3s;
+    }
+
+    .c-desc {
       font-size: 12px;
       font-weight: 300;
       color: var(--muted);
+      line-height: 1.7;
+      max-width: 310px;
+      margin-bottom: 28px;
+      min-height: 3.4em;
+      transition: opacity 0.3s;
     }
 
-    /* ── Animations ── */
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .c-price {
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 28px;
+      transition: opacity 0.3s;
     }
 
-    @keyframes fadeDown {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .c-bottom {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    .c-buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--text);
+      padding: 9px 16px;
+      transition: background 0.18s, color 0.18s;
     }
+    .c-buy:hover { background: var(--text); color: #fff; }
+
+    .c-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .c-nav-btn {
+      width: 34px; height: 34px;
+      border: 1px solid var(--btn-border);
+      background: transparent; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text);
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+    }
+    .c-nav-btn:hover { background: var(--text); border-color: var(--text); color: #fff; }
+
+    .c-counter {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      min-width: 48px;
+      text-align: center;
+    }
+
+    /* Right stage: 3D fan */
+    .c-stage {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1600px;
+      perspective-origin: 50% 50%;
+      z-index: 5;
+    }
+
+    .c-card {
+      position: absolute;
+      width: 258px;
+      height: 390px;
+      background: #fff;
+      border: 1px solid #111;
+      transition:
+        transform 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity   0.65s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      will-change: transform, opacity;
+      transform-origin: center center;
+    }
+
+    .c-card-img {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .c-card-img img {
+      width: 100%; height: 100%; object-fit: contain;
+      display: block;
+    }
+
+    .c-card-foot {
+      padding: 12px 14px;
+      flex-shrink: 0;
+    }
+    .c-card-brand {
+      font-size: 8px; font-weight: 400; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px;
+    }
+    .c-card-name { font-size: 12.5px; font-weight: 400; color: var(--text); line-height: 1.2; }
+
+    /* Fade class for info transitions */
+    .c-info.fading .c-label,
+    .c-info.fading .c-name,
+    .c-info.fading .c-desc,
+    .c-info.fading .c-price { opacity: 0; }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (max-width: 640px) {
-      .topbar {
-        padding: 20px 20px 0;
-      }
+      .topbar { padding: 20px 20px 0; }
+      .war-btn { display: none; }
+      .war-panel { right: 20px; width: calc(100vw - 40px); }
+      .hero { padding: 48px 20px 40px; }
+      .rule { margin: 0 20px; }
+      .grid-wrapper { padding: 0 20px; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .card-image { padding: 12px; }
+      .card-image img { width: 100%; height: 100%; }
+      footer { padding: 24px 20px 30px; }
 
-      .war-btn {
-        display: none;
+      /* Carousel mobile: stack vertically */
+      .carousel-section { flex-direction: column; height: calc(100vh - 60px); }
+      .c-info {
+        width: 100%; min-width: unset;
+        padding: 24px 20px 16px;
+        flex-shrink: 0;
+        order: 2;
       }
-
-      .war-panel {
-        right: 20px;
-        width: calc(100vw - 40px);
-      }
-
-      .hero {
-        padding: 48px 20px 40px;
-      }
-
-      .rule {
-        margin: 0 20px;
-      }
-
-      .grid-wrapper {
-        padding: 0 20px;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .card-image {
-        padding: 12px;
-      }
-
-      .card-image img {
-        width: 100%;
-        height: 100%;
-      }
-
-      footer {
-        padding: 24px 20px 30px;
-      }
+      .c-name { font-size: 26px; margin-bottom: 10px; }
+      .c-desc { display: none; }
+      .c-price { font-size: 16px; margin-bottom: 16px; }
+      .c-stage { order: 1; flex: 1; min-height: 0; }
+      .c-card { width: 180px; height: 270px; }
+      .c-bg-word { font-size: 18vw; }
     }
   </style>
 </head>
@@ -502,9 +530,28 @@
   <!-- Top bar -->
   <div class="topbar">
     <span class="site-name">Prepared</span>
-    <button class="war-btn" id="warBtn" onclick="toggleWarPanel()">
-      <span class="war-dot" id="warDot"></span>Check war conflict
-    </button>
+    <div class="topbar-right">
+      <div class="view-toggle">
+        <button class="vtbtn active" id="btnGrid" onclick="setView('grid')" title="Grid view">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="0" y="0" width="6" height="6" fill="currentColor"/>
+            <rect x="8" y="0" width="6" height="6" fill="currentColor"/>
+            <rect x="0" y="8" width="6" height="6" fill="currentColor"/>
+            <rect x="8" y="8" width="6" height="6" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="vtbtn" id="btnCarousel" onclick="setView('carousel')" title="Experiential view">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="0" y="2" width="3" height="10" fill="currentColor" opacity="0.4"/>
+            <rect x="5" y="0" width="4" height="14" fill="currentColor"/>
+            <rect x="11" y="2" width="3" height="10" fill="currentColor" opacity="0.4"/>
+          </svg>
+        </button>
+      </div>
+      <button class="war-btn" id="warBtn" onclick="toggleWarPanel()">
+        <span class="war-dot" id="warDot"></span>Check war conflict
+      </button>
+    </div>
   </div>
 
   <!-- War conflict panel -->
@@ -542,39 +589,70 @@
     <div class="grid" id="grid"></div>
   </div>
 
+  <!-- Carousel view -->
+  <div class="carousel-section" id="carouselSection">
+    <!-- Giant background text -->
+    <div class="c-bg"><span class="c-bg-word" id="cBgWord"></span></div>
+
+    <!-- Info panel -->
+    <div class="c-info" id="cInfo">
+      <span class="c-label" id="cLabel"></span>
+      <div class="c-name" id="cName"></div>
+      <div class="c-desc" id="cDesc"></div>
+      <div class="c-price" id="cPrice"></div>
+      <div class="c-bottom">
+        <a class="c-buy" id="cBuy" href="#" target="_blank" rel="noopener noreferrer sponsored">Shop ↗</a>
+        <div class="c-nav">
+          <button class="c-nav-btn" onclick="carouselPrev()">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M7.78 13.03a.75.75 0 0 1-1.06 0L2.47 8.78a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 1.06L5 7.5h7.25a.75.75 0 0 1 0 1.5H5l2.78 2.97a.75.75 0 0 1 0 1.06Z"/>
+            </svg>
+          </button>
+          <span class="c-counter" id="cCounter">01 / 01</span>
+          <button class="c-nav-btn" onclick="carouselNext()">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 1 1-1.06-1.06L11 8.5H3.75a.75.75 0 0 1 0-1.5H11L8.22 4.03a.75.75 0 0 1 0-1.06Z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D stage -->
+    <div class="c-stage" id="cStage"></div>
+  </div>
+
   <!-- Footer -->
   <footer>
     <span class="footer-left">Links de afiliación</span>
-    <span class="footer-right">15 objects · 2025</span>
+    <span class="footer-right" id="footerCount">15 objects · 2025</span>
   </footer>
 
   <script>
     // ── Google Sheets CMS ─────────────────────────────────────────
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmXG7dixDMOBwhTSpi_2YYINQNLdlwwlEamm5p35MYxatowf2aNOvmbi2LxGZk9_51V8ScE12GIY_0/pub?gid=0&single=true&output=csv';
 
-    // ── Fallback products ─────────────────────────────────────────
     const fallbackProducts = [
-      { brand: 'Leatherman',    name: 'Signal',                 price: '€109', url: 'https://www.amazon.com/dp/B07NJHX769', image: 'https://picsum.photos/seed/leatherman-signal/400/400'   },
-      { brand: 'Grayl',         name: 'GeoPress 24 oz',         price: '€78',  url: 'https://www.amazon.com/dp/B07NVYR4P9', image: 'https://picsum.photos/seed/grayl-geopress/400/400'      },
-      { brand: 'Garmin',        name: 'inReach Mini 2',         price: '€349', url: 'https://www.amazon.com/dp/B09BFTWX5F', image: 'https://picsum.photos/seed/garmin-inreach/400/400'      },
-      { brand: 'Morakniv',      name: 'Garberg Carbon',         price: '€89',  url: 'https://www.amazon.com/dp/B01LW2HL5G', image: 'https://picsum.photos/seed/morakniv-garberg/400/400'    },
-      { brand: 'Nitecore',      name: 'NU31',                   price: '€49',  url: 'https://www.amazon.com/dp/B09Q5PQTP7', image: 'https://picsum.photos/seed/nitecore-nu31/400/400'       },
-      { brand: 'MSR',           name: 'Hubba Hubba NX 2P',      price: '€550', url: 'https://www.amazon.com/dp/B07T3MFLFL', image: 'https://picsum.photos/seed/msr-hubba/400/400'           },
-      { brand: 'Therm-a-Rest',  name: 'NeoAir XLite NXT',       price: '€199', url: 'https://www.amazon.com/dp/B09NRFP4W8', image: 'https://picsum.photos/seed/thermarest-neoair/400/400'  },
-      { brand: 'MSR',           name: 'PocketRocket 2',         price: '€45',  url: 'https://www.amazon.com/dp/B01N5N5SBW', image: 'https://picsum.photos/seed/msr-pocketrocket/400/400'   },
-      { brand: 'Sawyer',        name: 'Squeeze Filter',         price: '€32',  url: 'https://www.amazon.com/dp/B00FA2IXBU', image: 'https://picsum.photos/seed/sawyer-squeeze/400/400'     },
-      { brand: 'Goal Zero',     name: 'Nomad 10',               price: '€59',  url: 'https://www.amazon.com/dp/B07FC1M7XV', image: 'https://picsum.photos/seed/goalzero-nomad/400/400'     },
-      { brand: 'Anker',         name: 'PowerCore 26800',        price: '€65',  url: 'https://www.amazon.com/dp/B01M5AX9J3', image: 'https://picsum.photos/seed/anker-powercore/400/400'    },
-      { brand: 'Light My Fire', name: 'Swedish FireSteel Army', price: '€16',  url: 'https://www.amazon.com/dp/B0019IXVRO', image: 'https://picsum.photos/seed/lightmyfire-steel/400/400'  },
-      { brand: 'Sea to Summit', name: 'Spark SP I Down',        price: '€280', url: 'https://www.amazon.com/dp/B07WDTJMC9', image: 'https://picsum.photos/seed/seatosummit-spark/400/400'  },
-      { brand: 'ESEE',          name: 'ESEE-4',                 price: '€145', url: 'https://www.amazon.com/dp/B003MXF3TC', image: 'https://picsum.photos/seed/esee-four/400/400'          },
-      { brand: 'Victorinox',    name: 'Swiss Army Huntsman',    price: '€29',  url: 'https://www.amazon.es/dp/B0013VAHIA',  image: 'https://picsum.photos/seed/victorinox-huntsman/400/400'},
+      { brand: 'Leatherman',    name: 'Signal',                 price: '€109', url: 'https://www.amazon.com/dp/B07NJHX769', image: 'https://picsum.photos/seed/leatherman-signal/400/400',    description: '19-in-1 multi-tool built for the field. Fire starter, emergency whistle, and full blade — all in 142g.' },
+      { brand: 'Grayl',         name: 'GeoPress 24 oz',         price: '€78',  url: 'https://www.amazon.com/dp/B07NVYR4P9', image: 'https://picsum.photos/seed/grayl-geopress/400/400',       description: 'Filter and purify 710ml of water in 8 seconds. Eliminates viruses, bacteria, and chemicals.' },
+      { brand: 'Garmin',        name: 'inReach Mini 2',         price: '€349', url: 'https://www.amazon.com/dp/B09BFTWX5F', image: 'https://picsum.photos/seed/garmin-inreach/400/400',       description: 'Two-way satellite messaging with zero cellular signal. SOS with 24/7 GEOS emergency monitoring.' },
+      { brand: 'Morakniv',      name: 'Garberg Carbon',         price: '€89',  url: 'https://www.amazon.com/dp/B01LW2HL5G', image: 'https://picsum.photos/seed/morakniv-garberg/400/400',     description: 'Full-tang carbon steel blade with Scandinavian grind. Built to outlast the knives that quit.' },
+      { brand: 'Nitecore',      name: 'NU31',                   price: '€49',  url: 'https://www.amazon.com/dp/B09Q5PQTP7', image: 'https://picsum.photos/seed/nitecore-nu31/400/400',        description: '1100-lumen headlamp with built-in USB-C charging. Up to 140 hours on eco mode.' },
+      { brand: 'MSR',           name: 'Hubba Hubba NX 2P',      price: '€550', url: 'https://www.amazon.com/dp/B07T3MFLFL', image: 'https://picsum.photos/seed/msr-hubba/400/400',            description: '1.72kg three-season shelter. Double-door, freestanding, built for fast deployment in any terrain.' },
+      { brand: 'Therm-a-Rest',  name: 'NeoAir XLite NXT',       price: '€199', url: 'https://www.amazon.com/dp/B09NRFP4W8', image: 'https://picsum.photos/seed/thermarest-neoair/400/400',   description: 'R-value 4.5 sleeping pad at 340g. The warmth-to-weight ratio nothing else matches.' },
+      { brand: 'MSR',           name: 'PocketRocket 2',         price: '€45',  url: 'https://www.amazon.com/dp/B01N5N5SBW', image: 'https://picsum.photos/seed/msr-pocketrocket/400/400',    description: '96g backpacking stove. Boils one litre in under 3.5 minutes from sea level to altitude.' },
+      { brand: 'Sawyer',        name: 'Squeeze Filter',         price: '€32',  url: 'https://www.amazon.com/dp/B00FA2IXBU', image: 'https://picsum.photos/seed/sawyer-squeeze/400/400',      description: '0.1-micron filtration with no batteries, no pumping, no waiting. Backed by a lifetime guarantee.' },
+      { brand: 'Goal Zero',     name: 'Nomad 10',               price: '€59',  url: 'https://www.amazon.com/dp/B07FC1M7XV', image: 'https://picsum.photos/seed/goalzero-nomad/400/400',      description: '10W foldable solar panel. Charges phones and small devices wherever the sun reaches.' },
+      { brand: 'Anker',         name: 'PowerCore 26800',        price: '€65',  url: 'https://www.amazon.com/dp/B01M5AX9J3', image: 'https://picsum.photos/seed/anker-powercore/400/400',     description: '26800mAh reserve — six full charges for most phones. For extended deployments off the grid.' },
+      { brand: 'Light My Fire', name: 'Swedish FireSteel Army', price: '€16',  url: 'https://www.amazon.com/dp/B0019IXVRO', image: 'https://picsum.photos/seed/lightmyfire-steel/400/400',   description: 'Rated for 12,000 strikes in rain, cold, or altitude. Ignites when lighters and matches fail.' },
+      { brand: 'Sea to Summit', name: 'Spark SP I Down',        price: '€280', url: 'https://www.amazon.com/dp/B07WDTJMC9', image: 'https://picsum.photos/seed/seatosummit-spark/400/400',   description: 'Down sleeping bag rated to -1°C, weighing 275g. Compresses to the size of a closed fist.' },
+      { brand: 'ESEE',          name: 'ESEE-4',                 price: '€145', url: 'https://www.amazon.com/dp/B003MXF3TC', image: 'https://picsum.photos/seed/esee-four/400/400',           description: 'Full-tang 1095 high-carbon fixed blade. Standard-issue for military and search-and-rescue teams.' },
+      { brand: 'Victorinox',    name: 'Swiss Army Huntsman',    price: '€29',  url: 'https://www.amazon.es/dp/B0013VAHIA',  image: 'https://picsum.photos/seed/victorinox-huntsman/400/400', description: '15 functions in 91mm. The original Swiss Army knife — in continuous production since 1891.' },
     ];
 
     // ── CSV parser ────────────────────────────────────────────────
     function splitCSVRow(row) {
-      const result = [];
-      let cur = '', inQ = false;
+      const result = []; let cur = '', inQ = false;
       for (let i = 0; i < row.length; i++) {
         if (row[i] === '"') { inQ = !inQ; }
         else if (row[i] === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
@@ -587,28 +665,25 @@
     function parseCSV(text) {
       const lines = text.trim().split('\n');
       const headers = splitCSVRow(lines[0]);
-      return lines.slice(1)
-        .filter(l => l.trim())
+      return lines.slice(1).filter(l => l.trim())
         .map(line => Object.fromEntries(headers.map((h, i) => [h, splitCSVRow(line)[i] || ''])));
     }
 
-    // ── Render ────────────────────────────────────────────────────
-
+    // ── Price formatter ───────────────────────────────────────────
     function formatPrice(raw) {
       const num = parseFloat(String(raw).replace(/[€$\s]/g, '').replace(',', '.'));
       if (isNaN(num)) return raw;
       return num.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
     }
 
+    // ── Grid render ───────────────────────────────────────────────
     function renderGrid(products) {
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-
       products.forEach((p) => {
         const card = document.createElement('a');
-        card.href      = p.url || '#';
-        card.target    = '_blank';
-        card.rel       = 'noopener noreferrer sponsored';
+        card.href = p.url || '#'; card.target = '_blank';
+        card.rel  = 'noopener noreferrer sponsored';
         card.className = 'card';
         card.innerHTML = `
           <div class="card-image">
@@ -618,267 +693,262 @@
             <span class="card-brand">${p.brand}</span>
             <span class="card-name">${p.name}</span>
             <span class="card-price">${formatPrice(p.price)}</span>
-          </div>
-        `;
+          </div>`;
         grid.appendChild(card);
       });
 
-      document.querySelector('.footer-right').textContent = `${products.length} objects · 2025`;
+      document.getElementById('footerCount').textContent = `${products.length} objects · 2025`;
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          const card = entry.target;
-          const col  = parseInt(card.dataset.index, 10) % 4;
-          card.style.transitionDelay = `${col * 0.07}s`;
-          card.classList.add('visible');
-          observer.unobserve(card);
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const c = e.target;
+          c.style.transitionDelay = `${(parseInt(c.dataset.index) % 4) * 0.07}s`;
+          c.classList.add('visible');
+          obs.unobserve(c);
         });
       }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-      document.querySelectorAll('.card').forEach((card, i) => {
-        card.dataset.index = i;
-        observer.observe(card);
+      document.querySelectorAll('.card').forEach((c, i) => { c.dataset.index = i; obs.observe(c); });
+    }
+
+    // ── View toggle ───────────────────────────────────────────────
+    let currentView = 'grid';
+
+    function setView(v) {
+      currentView = v;
+      document.body.classList.toggle('is-carousel', v === 'carousel');
+      document.getElementById('btnGrid').classList.toggle('active', v === 'grid');
+      document.getElementById('btnCarousel').classList.toggle('active', v === 'carousel');
+      if (v === 'carousel' && allProducts.length) {
+        buildCarouselCards();
+        updateCarousel();
+      }
+    }
+
+    // ── Carousel ──────────────────────────────────────────────────
+    let allProducts = [];
+    let carouselIndex = 0;
+
+    const CARD_STATES = {
+      '-3': { tx: -480, tz: -500, ry: 40, sc: 0.5,  op: 0 },
+      '-2': { tx: -330, tz: -300, ry: 28, sc: 0.68, op: 0.25 },
+      '-1': { tx: -185, tz: -120, ry: 16, sc: 0.84, op: 0.65 },
+       '0': { tx:    0, tz:    0, ry:  0, sc: 1,    op: 1 },
+       '1': { tx:  185, tz: -120, ry:-16, sc: 0.84, op: 0.65 },
+       '2': { tx:  330, tz: -300, ry:-28, sc: 0.68, op: 0.25 },
+       '3': { tx:  480, tz: -500, ry:-40, sc: 0.5,  op: 0 },
+    };
+
+    function cardState(rel) {
+      const key = Math.max(-3, Math.min(3, rel));
+      return CARD_STATES[String(key)];
+    }
+
+    function buildCarouselCards() {
+      const stage = document.getElementById('cStage');
+      stage.innerHTML = '';
+      allProducts.forEach((p, i) => {
+        const el = document.createElement('div');
+        el.className = 'c-card';
+        el.dataset.idx = i;
+        el.innerHTML = `
+          <div class="c-card-img">
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="c-card-foot">
+            <span class="c-card-brand">${p.brand}</span>
+            <span class="c-card-name">${p.name}</span>
+          </div>`;
+        el.addEventListener('click', () => {
+          const n = allProducts.length;
+          let diff = i - carouselIndex;
+          if (diff >  n / 2) diff -= n;
+          if (diff < -n / 2) diff += n;
+          if (diff === 1)  carouselNext();
+          else if (diff === -1) carouselPrev();
+        });
+        stage.appendChild(el);
       });
     }
 
+    function updateCarousel(fade) {
+      const n = allProducts.length;
+      if (!n) return;
+      const p = allProducts[carouselIndex];
+
+      if (fade) {
+        const info = document.getElementById('cInfo');
+        info.classList.add('fading');
+        setTimeout(() => {
+          fillInfo(p, n);
+          info.classList.remove('fading');
+        }, 220);
+      } else {
+        fillInfo(p, n);
+      }
+
+      // Position cards
+      document.querySelectorAll('.c-card').forEach((card, i) => {
+        let rel = i - carouselIndex;
+        if (rel >  n / 2) rel -= n;
+        if (rel < -n / 2) rel += n;
+        const s = cardState(rel);
+        card.style.transform = `translateX(${s.tx}px) translateZ(${s.tz}px) rotateY(${s.ry}deg) scale(${s.sc})`;
+        card.style.opacity   = s.op;
+        card.style.zIndex    = 10 - Math.abs(rel);
+        card.style.pointerEvents = Math.abs(rel) <= 1 ? 'auto' : 'none';
+      });
+    }
+
+    function fillInfo(p, n) {
+      document.getElementById('cLabel').textContent   = p.brand;
+      document.getElementById('cName').textContent    = p.name;
+      document.getElementById('cDesc').textContent    = p.description || '';
+      document.getElementById('cPrice').textContent   = formatPrice(p.price);
+      document.getElementById('cBuy').href            = p.url || '#';
+      document.getElementById('cCounter').textContent =
+        String(carouselIndex + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
+      const bg = document.getElementById('cBgWord');
+      bg.style.opacity = '0';
+      setTimeout(() => {
+        bg.textContent   = p.brand;
+        bg.style.opacity = '1';
+      }, 200);
+    }
+
+    function carouselNext() {
+      carouselIndex = (carouselIndex + 1) % allProducts.length;
+      updateCarousel(true);
+    }
+
+    function carouselPrev() {
+      carouselIndex = (carouselIndex - 1 + allProducts.length) % allProducts.length;
+      updateCarousel(true);
+    }
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      if (currentView !== 'carousel') return;
+      if (e.key === 'ArrowRight') carouselNext();
+      if (e.key === 'ArrowLeft')  carouselPrev();
+    });
+
+    // Touch swipe
+    let _tx = 0;
+    document.getElementById('cStage').addEventListener('touchstart', e => { _tx = e.touches[0].clientX; }, { passive: true });
+    document.getElementById('cStage').addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - _tx;
+      if (Math.abs(dx) > 48) { if (dx < 0) carouselNext(); else carouselPrev(); }
+    });
+
     // ── Load ──────────────────────────────────────────────────────
     async function init() {
-      if (SHEET_CSV_URL.startsWith('PEGA_AQUI')) {
-        renderGrid(fallbackProducts);
-        return;
+      let products = fallbackProducts;
+      if (!SHEET_CSV_URL.startsWith('PEGA_AQUI')) {
+        try {
+          const res = await fetch(SHEET_CSV_URL);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = parseCSV(await res.text());
+          if (data.length) products = data;
+        } catch (err) {
+          console.warn('Using fallback products.', err);
+        }
       }
-      try {
-        const res  = await fetch(SHEET_CSV_URL);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = parseCSV(await res.text());
-        renderGrid(data);
-      } catch (err) {
-        console.warn('No se pudo cargar Google Sheets, usando datos locales.', err);
-        renderGrid(fallbackProducts);
-      }
+      allProducts = products;
+      renderGrid(products);
     }
 
     init();
 
     // ── War conflict checker ──────────────────────────────────────
-    // Risk scores (0–100) based on ongoing conflicts, geopolitical tensions
-    // and recent events as of early 2026. Above 50 = high probability.
     const CONFLICT_RISK = {
-      'Afghanistan': 89,
-      'Albania': 11,
-      'Algeria': 24,
-      'Angola': 18,
-      'Argentina': 7,
-      'Armenia': 42,
-      'Australia': 3,
-      'Austria': 5,
-      'Azerbaijan': 40,
-      'Bangladesh': 20,
-      'Belarus': 48,
-      'Belgium': 6,
-      'Bolivia': 12,
-      'Bosnia and Herzegovina': 32,
-      'Brazil': 10,
-      'Bulgaria': 8,
-      'Burkina Faso': 76,
-      'Cambodia': 11,
-      'Cameroon': 52,
-      'Canada': 4,
-      'Central African Republic': 74,
-      'Chad': 63,
-      'Chile': 6,
-      'China': 22,
-      'Colombia': 28,
-      'Congo': 65,
-      'Democratic Republic of Congo': 78,
-      'Costa Rica': 4,
-      'Croatia': 7,
-      'Cuba': 15,
-      'Czech Republic': 6,
-      'Denmark': 4,
-      'Ecuador': 14,
-      'Egypt': 26,
-      'El Salvador': 17,
-      'Eritrea': 60,
-      'Estonia': 14,
-      'Ethiopia': 65,
-      'Finland': 13,
-      'France': 9,
-      'Georgia': 38,
-      'Germany': 7,
-      'Ghana': 8,
-      'Greece': 11,
-      'Guatemala': 16,
-      'Guinea': 30,
-      'Haiti': 68,
-      'Honduras': 18,
-      'Hungary': 10,
-      'India': 22,
-      'Indonesia': 13,
-      'Iran': 49,
-      'Iraq': 55,
-      'Ireland': 4,
-      'Israel': 73,
-      'Italy': 6,
-      'Japan': 8,
-      'Jordan': 20,
-      'Kazakhstan': 12,
-      'Kenya': 20,
-      'Kosovo': 53,
-      'Kuwait': 13,
-      'Latvia': 14,
-      'Lebanon': 48,
-      'Libya': 61,
-      'Lithuania': 14,
-      'Malaysia': 8,
-      'Mali': 73,
-      'Mexico': 18,
-      'Moldova': 43,
-      'Morocco': 15,
-      'Mozambique': 56,
-      'Myanmar': 83,
-      'Nepal': 10,
-      'Netherlands': 5,
-      'New Zealand': 3,
-      'Nicaragua': 18,
-      'Niger': 71,
-      'Nigeria': 58,
-      'North Korea': 66,
-      'Norway': 4,
-      'Pakistan': 58,
-      'Palestine': 92,
-      'Panama': 6,
-      'Paraguay': 6,
-      'Peru': 12,
-      'Philippines': 20,
-      'Poland': 18,
-      'Portugal': 5,
-      'Romania': 9,
-      'Russia': 71,
-      'Rwanda': 22,
-      'Saudi Arabia': 28,
-      'Senegal': 15,
-      'Serbia': 33,
-      'Sierra Leone': 18,
-      'Slovakia': 7,
-      'Slovenia': 5,
-      'Somalia': 81,
-      'South Africa': 18,
-      'South Korea': 18,
-      'South Sudan': 75,
-      'Spain': 7,
-      'Sri Lanka': 12,
-      'Sudan': 86,
-      'Sweden': 8,
-      'Switzerland': 4,
-      'Syria': 76,
-      'Taiwan': 46,
-      'Tajikistan': 26,
-      'Tanzania': 10,
-      'Thailand': 14,
-      'Tunisia': 18,
-      'Turkey': 28,
-      'Turkmenistan': 15,
-      'Uganda': 22,
-      'Ukraine': 91,
-      'United Arab Emirates': 10,
-      'United Kingdom': 7,
-      'United States': 12,
-      'Uruguay': 5,
-      'Uzbekistan': 12,
-      'Venezuela': 36,
-      'Vietnam': 10,
-      'Yemen': 80,
-      'Zambia': 8,
-      'Zimbabwe': 30,
+      'Afghanistan':88,'Albania':11,'Algeria':24,'Angola':18,'Argentina':7,'Armenia':42,
+      'Australia':3,'Austria':5,'Azerbaijan':40,'Bangladesh':20,'Belarus':48,'Belgium':6,
+      'Bolivia':12,'Bosnia and Herzegovina':32,'Brazil':10,'Bulgaria':8,'Burkina Faso':76,
+      'Cambodia':11,'Cameroon':52,'Canada':4,'Central African Republic':74,'Chad':63,
+      'Chile':6,'China':22,'Colombia':28,'Congo':65,'Democratic Republic of Congo':78,
+      'Costa Rica':4,'Croatia':7,'Cuba':15,'Czech Republic':6,'Denmark':4,'Ecuador':14,
+      'Egypt':26,'El Salvador':17,'Eritrea':60,'Estonia':14,'Ethiopia':65,'Finland':13,
+      'France':9,'Georgia':38,'Germany':7,'Ghana':8,'Greece':11,'Guatemala':16,
+      'Guinea':30,'Haiti':68,'Honduras':18,'Hungary':10,'India':22,'Indonesia':13,
+      'Iran':49,'Iraq':55,'Ireland':4,'Israel':73,'Italy':6,'Japan':8,'Jordan':20,
+      'Kazakhstan':12,'Kenya':20,'Kosovo':53,'Kuwait':13,'Latvia':14,'Lebanon':48,
+      'Libya':61,'Lithuania':14,'Malaysia':8,'Mali':73,'Mexico':18,'Moldova':43,
+      'Morocco':15,'Mozambique':56,'Myanmar':83,'Nepal':10,'Netherlands':5,
+      'New Zealand':3,'Nicaragua':18,'Niger':71,'Nigeria':58,'North Korea':66,
+      'Norway':4,'Pakistan':58,'Palestine':92,'Panama':6,'Paraguay':6,'Peru':12,
+      'Philippines':20,'Poland':18,'Portugal':5,'Romania':9,'Russia':71,'Rwanda':22,
+      'Saudi Arabia':28,'Senegal':15,'Serbia':33,'Sierra Leone':18,'Slovakia':7,
+      'Slovenia':5,'Somalia':81,'South Africa':18,'South Korea':18,'South Sudan':75,
+      'Spain':7,'Sri Lanka':12,'Sudan':86,'Sweden':8,'Switzerland':4,'Syria':76,
+      'Taiwan':46,'Tajikistan':26,'Tanzania':10,'Thailand':14,'Tunisia':18,'Turkey':28,
+      'Turkmenistan':15,'Uganda':22,'Ukraine':91,'United Arab Emirates':10,
+      'United Kingdom':7,'United States':12,'Uruguay':5,'Uzbekistan':12,
+      'Venezuela':36,'Vietnam':10,'Yemen':80,'Zambia':8,'Zimbabwe':30,
     };
 
     const allCountries = Object.keys(CONFLICT_RISK).sort();
     let toastTimer = null;
 
-    function showToast(msg, level) {
+    function showToast(msg) {
       const el = document.getElementById('toast');
       el.textContent = msg;
-      el.className = 'toast ' + (level || '');
+      el.className = 'toast';
       el.classList.add('show');
       if (toastTimer) clearTimeout(toastTimer);
       toastTimer = setTimeout(() => el.classList.remove('show'), 5500);
     }
 
-    function checkConflict(countryName) {
-      const name = countryName.trim();
-      // Try exact match first, then case-insensitive
-      const key = allCountries.find(c => c === name) ||
-                  allCountries.find(c => c.toLowerCase() === name.toLowerCase());
-      if (!key) {
-        showToast(`Country "${name}" not found in our database.`, '');
-        return;
-      }
+    function checkConflict(country) {
+      const key = allCountries.find(c => c === country) ||
+                  allCountries.find(c => c.toLowerCase() === country.toLowerCase());
+      if (!key) { showToast(`"${country}" not found in our database.`); return; }
       const risk = CONFLICT_RISK[key];
-      const dot = document.getElementById('warDot');
+      const dot  = document.getElementById('warDot');
       dot.className = 'war-dot ' + (risk > 50 ? 'red' : 'green');
       closeWarPanel();
-      if (risk > 50) {
-        showToast(`${key}\nConflict probability above 50% — stay alert and prepared.`, 'high');
-      } else {
-        showToast(`${key}\nConflict probability below 50% — situation currently stable.`, 'low');
-      }
+      if (risk > 50)
+        showToast(`${key} — conflict probability above 50%\nStay alert and prepared.`);
+      else
+        showToast(`${key} — conflict probability below 50%\nSituation currently stable.`);
     }
 
     function renderCountryList(filter) {
       const list = document.getElementById('warList');
-      const q = (filter || '').toLowerCase();
-      const matches = allCountries.filter(c => c.toLowerCase().includes(q));
-      if (!matches.length) {
-        list.innerHTML = '<div class="war-empty">No countries found</div>';
-        return;
-      }
-      list.innerHTML = matches
-        .map(c => `<button class="war-country-item" onclick="checkConflict('${c.replace(/'/g, "\\'")}')">${c}</button>`)
-        .join('');
+      const q    = (filter || '').toLowerCase();
+      const hits = allCountries.filter(c => c.toLowerCase().includes(q));
+      if (!hits.length) { list.innerHTML = '<div class="war-empty">No countries found</div>'; return; }
+      list.innerHTML = hits.map(c =>
+        `<button class="war-country-item" onclick="checkConflict('${c.replace(/'/g, "\\'")}')">${c}</button>`
+      ).join('');
     }
 
-    function filterCountries(val) {
-      renderCountryList(val);
-    }
+    function filterCountries(v) { renderCountryList(v); }
 
     function toggleWarPanel() {
-      const panel = document.getElementById('warPanel');
-      if (panel.classList.contains('open')) {
-        closeWarPanel();
-      } else {
-        openWarPanel();
-      }
+      document.getElementById('warPanel').classList.contains('open') ? closeWarPanel() : openWarPanel();
     }
 
     function openWarPanel() {
-      const panel = document.getElementById('warPanel');
-      panel.classList.add('open');
+      document.getElementById('warPanel').classList.add('open');
       document.getElementById('warSearch').value = '';
       renderCountryList('');
       setTimeout(() => document.getElementById('warSearch').focus(), 50);
     }
 
-    function closeWarPanel() {
-      document.getElementById('warPanel').classList.remove('open');
-    }
+    function closeWarPanel() { document.getElementById('warPanel').classList.remove('open'); }
 
-    // Close panel when clicking outside
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
       const panel = document.getElementById('warPanel');
       const btn   = document.getElementById('warBtn');
-      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn && !btn.contains(e.target))
         closeWarPanel();
-      }
     });
 
     async function geolocateUser() {
-      if (!navigator.geolocation) {
-        showToast('Geolocation is not supported by your browser.', '');
-        return;
-      }
-      showToast('Detecting your location…', '');
+      if (!navigator.geolocation) { showToast('Geolocation not supported by your browser.'); return; }
+      showToast('Detecting your location…');
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           try {
@@ -888,16 +958,12 @@
               { headers: { 'Accept-Language': 'en' } }
             );
             const data = await res.json();
-            const country = data.address && (data.address.country);
-            if (!country) throw new Error('no country');
+            const country = data.address && data.address.country;
+            if (!country) throw new Error();
             checkConflict(country);
-          } catch {
-            showToast('Could not determine your country. Please select manually.', '');
-          }
+          } catch { showToast('Could not identify your country. Please select manually.'); }
         },
-        () => {
-          showToast('Location access denied. Please select your country manually.', '');
-        }
+        () => showToast('Location access denied. Please select your country manually.')
       );
     }
   </script>
