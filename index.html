@@ -594,6 +594,12 @@
 
     // ── Render ────────────────────────────────────────────────────
 
+    function formatPrice(raw) {
+      const num = parseFloat(String(raw).replace(/[€$\s]/g, '').replace(',', '.'));
+      if (isNaN(num)) return raw;
+      return num.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
+    }
+
     function renderGrid(products) {
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
@@ -611,7 +617,7 @@
           <div class="card-info">
             <span class="card-brand">${p.brand}</span>
             <span class="card-name">${p.name}</span>
-            <span class="card-price">${p.price}</span>
+            <span class="card-price">${formatPrice(p.price)}</span>
           </div>
         `;
         grid.appendChild(card);
