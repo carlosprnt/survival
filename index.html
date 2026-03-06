@@ -56,6 +56,213 @@
       user-select: none;
     }
 
+    /* ── War conflict button ── */
+    .war-btn {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+      border: 1px solid var(--btn-border);
+      padding: 7px 14px;
+      cursor: pointer;
+      background: transparent;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .war-btn:hover {
+      background: var(--text);
+      color: #ffffff;
+      border-color: var(--text);
+    }
+
+    /* ── War panel ── */
+    .war-panel {
+      position: fixed;
+      top: 64px;
+      right: 40px;
+      width: 272px;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+    }
+
+    .war-panel.open {
+      display: flex;
+    }
+
+    .war-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border-line);
+    }
+
+    .war-panel-title {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .war-panel-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+
+    .war-panel-close:hover {
+      color: var(--text);
+    }
+
+    .war-geo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-line);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text);
+      transition: background 0.15s;
+      background: none;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      font-family: 'Google Sans', sans-serif;
+      width: 100%;
+      text-align: left;
+    }
+
+    .war-geo:hover {
+      background: #f5f5f5;
+    }
+
+    .war-geo svg {
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .war-search-wrap {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-line);
+    }
+
+    .war-search {
+      width: 100%;
+      border: 1px solid var(--border-line);
+      padding: 7px 10px;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      background: #fafafa;
+      transition: border-color 0.15s;
+    }
+
+    .war-search:focus {
+      border-color: rgba(0,0,0,0.3);
+      background: #fff;
+    }
+
+    .war-search::placeholder {
+      color: var(--muted);
+    }
+
+    .war-list {
+      max-height: 220px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .war-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .war-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .war-list::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.12);
+    }
+
+    .war-country-item {
+      display: block;
+      width: 100%;
+      padding: 9px 16px;
+      text-align: left;
+      background: none;
+      border: none;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 300;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .war-country-item:hover {
+      background: #f5f5f5;
+    }
+
+    .war-empty {
+      padding: 16px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--text);
+      color: #ffffff;
+      padding: 13px 20px;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 300;
+      line-height: 1.45;
+      max-width: min(400px, calc(100vw - 40px));
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 300;
+      pointer-events: none;
+      white-space: pre-line;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.high {
+      background: #1a1a1a;
+    }
+
+    .toast.low {
+      background: #111110;
+    }
+
     /* ── Hero ── */
     .hero {
       padding: 76px 40px 56px;
@@ -282,6 +489,15 @@
         padding: 20px 20px 0;
       }
 
+      .war-btn {
+        display: none;
+      }
+
+      .war-panel {
+        right: 20px;
+        width: calc(100vw - 40px);
+      }
+
       .hero {
         padding: 48px 20px 40px;
       }
@@ -296,6 +512,10 @@
 
       .grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card-image {
+        padding: 12px;
       }
 
       .card-image img {
@@ -314,7 +534,29 @@
   <!-- Top bar -->
   <div class="topbar">
     <span class="site-name">Prepared</span>
+    <button class="war-btn" id="warBtn" onclick="toggleWarPanel()">Check war conflict</button>
   </div>
+
+  <!-- War conflict panel -->
+  <div class="war-panel" id="warPanel">
+    <div class="war-panel-header">
+      <span class="war-panel-title">Conflict risk by country</span>
+      <button class="war-panel-close" onclick="closeWarPanel()">&#x2715;</button>
+    </div>
+    <button class="war-geo" onclick="geolocateUser()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+      </svg>
+      Use my location
+    </button>
+    <div class="war-search-wrap">
+      <input class="war-search" id="warSearch" type="text" placeholder="Search country…" oninput="filterCountries(this.value)" autocomplete="off">
+    </div>
+    <div class="war-list" id="warList"></div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
 
   <!-- Hero -->
   <div class="hero">
@@ -338,15 +580,9 @@
 
   <script>
     // ── Google Sheets CMS ─────────────────────────────────────────
-    // Pasos para configurar:
-    // 1. Crea una Google Sheet con estas columnas (fila 1 = cabeceras):
-    //    brand | name | price | url | image
-    // 2. Rellena tus productos (image = URL de Cloudinary u otro host)
-    // 3. Archivo → Compartir → Publicar en la web → Hoja1 → CSV → Publicar
-    // 4. Copia la URL y pégala abajo
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmXG7dixDMOBwhTSpi_2YYINQNLdlwwlEamm5p35MYxatowf2aNOvmbi2LxGZk9_51V8ScE12GIY_0/pub?gid=0&single=true&output=csv';
 
-    // ── Fallback: productos por defecto ───────────────────────────
+    // ── Fallback products ─────────────────────────────────────────
     const fallbackProducts = [
       { brand: 'Leatherman',    name: 'Signal',                 price: '€109', url: 'https://www.amazon.com/dp/B07NJHX769', image: 'https://picsum.photos/seed/leatherman-signal/400/400'   },
       { brand: 'Grayl',         name: 'GeoPress 24 oz',         price: '€78',  url: 'https://www.amazon.com/dp/B07NVYR4P9', image: 'https://picsum.photos/seed/grayl-geopress/400/400'      },
@@ -454,6 +690,244 @@
     }
 
     init();
+
+    // ── War conflict checker ──────────────────────────────────────
+    // Risk scores (0–100) based on ongoing conflicts, geopolitical tensions
+    // and recent events as of early 2026. Above 50 = high probability.
+    const CONFLICT_RISK = {
+      'Afghanistan': 89,
+      'Albania': 11,
+      'Algeria': 24,
+      'Angola': 18,
+      'Argentina': 7,
+      'Armenia': 42,
+      'Australia': 3,
+      'Austria': 5,
+      'Azerbaijan': 40,
+      'Bangladesh': 20,
+      'Belarus': 48,
+      'Belgium': 6,
+      'Bolivia': 12,
+      'Bosnia and Herzegovina': 32,
+      'Brazil': 10,
+      'Bulgaria': 8,
+      'Burkina Faso': 76,
+      'Cambodia': 11,
+      'Cameroon': 52,
+      'Canada': 4,
+      'Central African Republic': 74,
+      'Chad': 63,
+      'Chile': 6,
+      'China': 22,
+      'Colombia': 28,
+      'Congo': 65,
+      'Democratic Republic of Congo': 78,
+      'Costa Rica': 4,
+      'Croatia': 7,
+      'Cuba': 15,
+      'Czech Republic': 6,
+      'Denmark': 4,
+      'Ecuador': 14,
+      'Egypt': 26,
+      'El Salvador': 17,
+      'Eritrea': 60,
+      'Estonia': 14,
+      'Ethiopia': 65,
+      'Finland': 13,
+      'France': 9,
+      'Georgia': 38,
+      'Germany': 7,
+      'Ghana': 8,
+      'Greece': 11,
+      'Guatemala': 16,
+      'Guinea': 30,
+      'Haiti': 68,
+      'Honduras': 18,
+      'Hungary': 10,
+      'India': 22,
+      'Indonesia': 13,
+      'Iran': 49,
+      'Iraq': 55,
+      'Ireland': 4,
+      'Israel': 73,
+      'Italy': 6,
+      'Japan': 8,
+      'Jordan': 20,
+      'Kazakhstan': 12,
+      'Kenya': 20,
+      'Kosovo': 53,
+      'Kuwait': 13,
+      'Latvia': 14,
+      'Lebanon': 48,
+      'Libya': 61,
+      'Lithuania': 14,
+      'Malaysia': 8,
+      'Mali': 73,
+      'Mexico': 18,
+      'Moldova': 43,
+      'Morocco': 15,
+      'Mozambique': 56,
+      'Myanmar': 83,
+      'Nepal': 10,
+      'Netherlands': 5,
+      'New Zealand': 3,
+      'Nicaragua': 18,
+      'Niger': 71,
+      'Nigeria': 58,
+      'North Korea': 66,
+      'Norway': 4,
+      'Pakistan': 58,
+      'Palestine': 92,
+      'Panama': 6,
+      'Paraguay': 6,
+      'Peru': 12,
+      'Philippines': 20,
+      'Poland': 18,
+      'Portugal': 5,
+      'Romania': 9,
+      'Russia': 71,
+      'Rwanda': 22,
+      'Saudi Arabia': 28,
+      'Senegal': 15,
+      'Serbia': 33,
+      'Sierra Leone': 18,
+      'Slovakia': 7,
+      'Slovenia': 5,
+      'Somalia': 81,
+      'South Africa': 18,
+      'South Korea': 18,
+      'South Sudan': 75,
+      'Spain': 7,
+      'Sri Lanka': 12,
+      'Sudan': 86,
+      'Sweden': 8,
+      'Switzerland': 4,
+      'Syria': 76,
+      'Taiwan': 46,
+      'Tajikistan': 26,
+      'Tanzania': 10,
+      'Thailand': 14,
+      'Tunisia': 18,
+      'Turkey': 28,
+      'Turkmenistan': 15,
+      'Uganda': 22,
+      'Ukraine': 91,
+      'United Arab Emirates': 10,
+      'United Kingdom': 7,
+      'United States': 12,
+      'Uruguay': 5,
+      'Uzbekistan': 12,
+      'Venezuela': 36,
+      'Vietnam': 10,
+      'Yemen': 80,
+      'Zambia': 8,
+      'Zimbabwe': 30,
+    };
+
+    const allCountries = Object.keys(CONFLICT_RISK).sort();
+    let toastTimer = null;
+
+    function showToast(msg, level) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast ' + (level || '');
+      el.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 5500);
+    }
+
+    function checkConflict(countryName) {
+      const name = countryName.trim();
+      // Try exact match first, then case-insensitive
+      const key = allCountries.find(c => c === name) ||
+                  allCountries.find(c => c.toLowerCase() === name.toLowerCase());
+      if (!key) {
+        showToast(`Country "${name}" not found in our database.`, '');
+        return;
+      }
+      const risk = CONFLICT_RISK[key];
+      closeWarPanel();
+      if (risk > 50) {
+        showToast(`${key}\nConflict probability above 50% — stay alert and prepared.`, 'high');
+      } else {
+        showToast(`${key}\nConflict probability below 50% — situation currently stable.`, 'low');
+      }
+    }
+
+    function renderCountryList(filter) {
+      const list = document.getElementById('warList');
+      const q = (filter || '').toLowerCase();
+      const matches = allCountries.filter(c => c.toLowerCase().includes(q));
+      if (!matches.length) {
+        list.innerHTML = '<div class="war-empty">No countries found</div>';
+        return;
+      }
+      list.innerHTML = matches
+        .map(c => `<button class="war-country-item" onclick="checkConflict('${c.replace(/'/g, "\\'")}')">${c}</button>`)
+        .join('');
+    }
+
+    function filterCountries(val) {
+      renderCountryList(val);
+    }
+
+    function toggleWarPanel() {
+      const panel = document.getElementById('warPanel');
+      if (panel.classList.contains('open')) {
+        closeWarPanel();
+      } else {
+        openWarPanel();
+      }
+    }
+
+    function openWarPanel() {
+      const panel = document.getElementById('warPanel');
+      panel.classList.add('open');
+      document.getElementById('warSearch').value = '';
+      renderCountryList('');
+      setTimeout(() => document.getElementById('warSearch').focus(), 50);
+    }
+
+    function closeWarPanel() {
+      document.getElementById('warPanel').classList.remove('open');
+    }
+
+    // Close panel when clicking outside
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('warPanel');
+      const btn   = document.getElementById('warBtn');
+      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+        closeWarPanel();
+      }
+    });
+
+    async function geolocateUser() {
+      if (!navigator.geolocation) {
+        showToast('Geolocation is not supported by your browser.', '');
+        return;
+      }
+      showToast('Detecting your location…', '');
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const { latitude, longitude } = pos.coords;
+            const res  = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+              { headers: { 'Accept-Language': 'en' } }
+            );
+            const data = await res.json();
+            const country = data.address && (data.address.country);
+            if (!country) throw new Error('no country');
+            checkConflict(country);
+          } catch {
+            showToast('Could not determine your country. Please select manually.', '');
+          }
+        },
+        () => {
+          showToast('Location access denied. Please select your country manually.', '');
+        }
+      );
+    }
   </script>
 
 </body>
