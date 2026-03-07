@@ -581,9 +581,7 @@
       .rule { margin: 0 20px; }
       .grid-wrapper { padding: 0 20px; }
       .grid { grid-template-columns: repeat(2, 1fr); }
-      .view-toggle-wrap { padding: 28px 20px 24px; }
-      .view-toggle { width: 100%; }
-      .vtbtn { flex: 1; text-align: center; }
+      .view-toggle-wrap { display: none; }
       .card-image { padding: 12px; }
       .card-image img { width: 100%; height: 100%; }
       footer { padding: 24px 20px 30px; }
@@ -805,8 +803,13 @@
       }
     }
 
-    // Init slider position after layout
-    window.addEventListener('load', () => setView('grid'));
+    // Init: carousel on mobile, grid on desktop
+    function isMobile() { return window.innerWidth <= 640; }
+    window.addEventListener('load', () => setView(isMobile() ? 'carousel' : 'grid'));
+    window.addEventListener('resize', () => {
+      const v = isMobile() ? 'carousel' : currentView;
+      setView(v);
+    });
 
     // ── Carousel ──────────────────────────────────────────────────
     let allProducts = [];
