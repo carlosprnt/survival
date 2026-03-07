@@ -331,27 +331,10 @@
       .card-image img { width: 100%; height: 100%; }
       footer { padding: 24px 20px 30px; }
 
-      /* Featured card: every 3rd item, full width horizontal */
-      .card--featured {
-        grid-column: 1 / -1;
-        flex-direction: row;
-      }
-      .card--featured .card-image {
-        width: 44%;
-        flex-shrink: 0;
-        aspect-ratio: unset;
-        align-self: stretch;
-      }
-      .card--featured .card-info {
-        flex: 1;
-        padding: 20px 18px 28px;
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
+      /* Featured card: every 3rd item, full width square */
+      .card--featured { grid-column: 1 / -1; }
+      .card--featured .card-image { aspect-ratio: 1 / 1; }
       .card--featured .card-name { font-size: 17px; }
-      .card--featured .card-price { margin-top: 12px; }
     }
   </style>
 </head>
